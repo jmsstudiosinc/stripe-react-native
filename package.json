@@ -1,5 +1,5 @@
 {
-  "name": "@stripe/stripe-react-native",
+  "name": "@jmsstudiosinc/stripe-react-native",
   "version": "0.25.0",
   "author": "Stripe",
   "description": "Stripe SDK for React Native",
@@ -28,17 +28,24 @@
     "test-ios": "maestro test -e APP_ID=com.stripe.react.native",
     "test-android": "maestro test -e APP_ID=com.example.reactnativestripesdk"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jmsstudiosinc/stripe-react-native.git"
+  },
+    "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+
   "keywords": [
     "react-native",
     "ios",
     "android"
   ],
-  "repository": "https://github.com/stripe/stripe-react-native",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/stripe/stripe-react-native/issues"
+    "url": "https://github.com/jmsstudiosinc/stripe-react-native/issues"
   },
-  "homepage": "https://github.com/stripe/stripe-react-native/#readme",
+  "homepage": "https://github.com/jmsstudiosinc/stripe-react-native/#readme",
   "dependencies": {},
   "devDependencies": {
     "@babel/plugin-transform-typescript": "^7.13.0",
