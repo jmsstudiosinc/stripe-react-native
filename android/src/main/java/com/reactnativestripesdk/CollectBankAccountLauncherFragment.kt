@@ -24,7 +24,6 @@ import com.stripe.android.payments.bankaccount.navigation.CollectBankAccountResu
 class CollectBankAccountLauncherFragment(
   private val context: ReactApplicationContext,
   private val publishableKey: String,
-  private val stripeAccountId: String?,
   private val clientSecret: String,
   private val isPaymentIntent: Boolean,
   private val collectParams:  CollectBankAccountConfiguration.USBankAccount,
@@ -49,14 +48,12 @@ class CollectBankAccountLauncherFragment(
     if (isPaymentIntent) {
       collectBankAccountLauncher.presentWithPaymentIntent(
         publishableKey,
-        stripeAccountId,
         clientSecret,
         collectParams
       )
     } else {
       collectBankAccountLauncher.presentWithSetupIntent(
         publishableKey,
-        stripeAccountId,
         clientSecret,
         collectParams
       )
@@ -86,11 +83,7 @@ class CollectBankAccountLauncherFragment(
           promise.resolve(createError(ErrorType.Failed.toString(), result.error))
         }
       }
-      removeFragment(context)
+      (context.currentActivity as? AppCompatActivity)?.supportFragmentManager?.beginTransaction()?.remove(this)?.commitAllowingStateLoss()
     }
-  }
-
-  companion object {
-    internal const val TAG = "collect_bank_account_launcher_fragment"
   }
 }

@@ -204,8 +204,4 @@ class GooglePayFragment(private val initPromise: Promise) : Fragment() {
       isPhoneNumberRequired = isPhoneNumberRequired
     )
   }
-
-  companion object {
-    internal const val TAG = "google_pay_launch_fragment"
-  }
 }

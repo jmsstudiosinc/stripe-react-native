@@ -34,7 +34,7 @@ enum class RetrieveSetupIntentErrorType {
 }
 
 enum class PaymentSheetErrorType {
-  Failed, Canceled, Timeout
+  Failed, Canceled
 }
 
 enum class GooglePayErrorType {
@@ -110,8 +110,4 @@ internal fun createError(code: String, error: Throwable): WritableMap {
     null,
     null,
     null)
-}
-
-internal fun createMissingInitError(): WritableMap {
-  return createError(ErrorType.Failed.toString(), "Stripe has not been initialized. Initialize Stripe in your app with the StripeProvider component or the initStripe method.")
 }
