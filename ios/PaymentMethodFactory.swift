@@ -158,11 +158,15 @@ class PaymentMethodFactory {
     private func createCardPaymentMethodParams() throws -> STPPaymentMethodParams {
         if let token = paymentMethodData?["token"] as? String {
             let methodParams = STPPaymentMethodCardParams()
-            methodParams.token = token
+            methodParams.token = RCTConvert.nsString(token)
             return STPPaymentMethodParams(card: methodParams, billingDetails: billingDetailsParams, metadata: nil)
         }
 
-        if let params = cardFieldView?.cardParams as? STPPaymentMethodParams {
+        guard let cardParams = cardFieldView?.cardParams ?? cardFormView?.cardParams else {
+            throw PaymentMethodError.cardPaymentMissingParams
+        }
+
+        if cardFieldView?.cardParams != nil {
             if let postalCode = cardFieldView?.cardPostalCode{
                 if (billingDetailsParams == nil) {
                     let bd = STPPaymentMethodBillingDetails()
@@ -173,10 +177,8 @@ class PaymentMethodFactory {
                     billingDetailsParams?.address?.postalCode = postalCode
                 }
             }
-            params.billingDetails = billingDetailsParams
-            return params
         }
-        if let params = cardFormView?.cardParams as? STPPaymentMethodCardParams {
+        if cardFormView?.cardParams != nil {
             if let address = cardFormView?.cardForm?.cardParams?.billingDetails?.address {
                 if (billingDetailsParams == nil) {
                     let bd = STPPaymentMethodBillingDetails()
@@ -189,10 +191,9 @@ class PaymentMethodFactory {
                     billingDetailsParams?.address?.country = address.country
                 }
             }
-            return STPPaymentMethodParams(card: params, billingDetails: billingDetailsParams, metadata: nil)
         }
 
-        throw PaymentMethodError.cardPaymentMissingParams
+        return STPPaymentMethodParams(card: cardParams, billingDetails: billingDetailsParams, metadata: nil)
     }
 
 

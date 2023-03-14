@@ -1,50 +1,21 @@
-import type { BillingDetails, AddressDetails } from './Common';
+import type { BillingDetails } from './Common';
 import type { CartSummaryItem } from './ApplePay';
-import type {
-  ButtonType,
-  RecurringPaymentRequest,
-  AutomaticReloadPaymentRequest,
-  MultiMerchantRequest,
-} from './PlatformPay';
 
 export type SetupParams = ClientSecretParams & {
   /** Your customer-facing business name. On Android, this is required and cannot be an empty string. */
   merchantDisplayName: string;
-  /** The identifier of the Stripe Customer object. See https://stripe.com/docs/api/customers/object#customer_object-id */
   customerId?: string;
-  /** A short-lived token that allows the SDK to access a Customer’s payment methods. */
   customerEphemeralKeySecret?: string;
-  /** When set to true, separates out the payment method selection & confirmation steps.
-   * If true, you must call `confirmPaymentSheetPayment` on your own. Defaults to false. */
   customFlow?: boolean;
   /** iOS only. Enable Apple Pay in the Payment Sheet by passing an ApplePayParams object.  */
   applePay?: ApplePayParams;
   /** Android only. Enable Google Pay in the Payment Sheet by passing a GooglePayParams object.  */
   googlePay?: GooglePayParams;
-  /** The color styling to use for PaymentSheet UI. Defaults to 'automatic'. */
   style?: 'alwaysLight' | 'alwaysDark' | 'automatic';
-  /** A URL that redirects back to your app that PaymentSheet can use to auto-dismiss web views used for additional authentication, e.g. 3DS2 */
   returnURL?: string;
-  /** PaymentSheet pre-populates the billing fields that are displayed in the Payment Sheet (only country and postal code, as of this version) with the values provided. */
   defaultBillingDetails?: BillingDetails;
-  /**
-   * The shipping information for the customer. If set, PaymentSheet will pre-populate the form fields with the values provided.
-   * This is used to display a "Billing address is same as shipping" checkbox if `defaultBillingDetails` is not provided.
-   * If `name` and `line1` are populated, it's also [attached to the PaymentIntent](https://stripe.com/docs/api/payment_intents/object#payment_intent_object-shipping) during payment.
-   */
-  defaultShippingDetails?: AddressDetails;
-  /** If true, allows payment methods that do not move money at the end of the checkout. Defaults to false.
-   *
-   * Some payment methods can’t guarantee you will receive funds from your customer at the end of the checkout
-   * because they take time to settle (eg. most bank debits, like SEPA or ACH) or require customer action to
-   * complete (e.g. OXXO, Konbini, Boleto). If this is set to true, make sure your integration listens to webhooks
-   * for notifications on whether a payment has succeeded or not.
-   */
   allowsDelayedPaymentMethods?: boolean;
-  /** Customizes the appearance of PaymentSheet */
   appearance?: AppearanceParams;
-  /** The label to use for the primary button. If not set, Payment Sheet will display suitable default labels for payment and setup intents. */
-  primaryButtonLabel?: string;
 };
 
 export type ClientSecretParams =
@@ -63,26 +34,7 @@ export type ApplePayParams = {
   /**
    * An array of CartSummaryItem item objects that summarize the amount of the payment. If you're using a SetupIntent
    * for a recurring payment, you should set this to display the amount you intend to charge. */
-  cartItems?: CartSummaryItem[];
-  /** Sets the text displayed by the call to action button in the Apple Pay sheet. */
-  buttonType?: ButtonType;
-  /** A typical request is for a one-time payment. To support different types of payment requests, include a PaymentRequestType. Only supported on iOS 16 and up. */
-  request?:
-    | RecurringPaymentRequest
-    | AutomaticReloadPaymentRequest
-    | MultiMerchantRequest;
-  /** Callback function for setting the order details (retrieved from your server) to give users the
-   * ability to track and manage their purchases in Wallet. Stripe calls your implementation after the
-   * payment is complete, but before iOS dismisses the Apple Pay sheet. You must call the `completion`
-   * function, or else the Apple Pay sheet will hang. */
-  setOrderTracking?: (
-    completion: (
-      orderIdentifier: string,
-      orderTypeIdentifier: string,
-      authenticationToken: string,
-      webServiceUrl: string
-    ) => void
-  ) => void;
+  paymentSummaryItems?: CartSummaryItem[];
 };
 
 export type GooglePayParams = {
@@ -255,10 +207,3 @@ export interface PaymentOption {
   label: string;
   image: string;
 }
-
-export type PresentOptions = {
-  /** The number of milliseconds (after presenting) before the Payment Sheet closes automatically, at which point
-   *`presentPaymentSheet` will resolve with an `error.code` of `PaymentSheetError.Timeout`. The default is no timeout.
-   */
-  timeout?: number;
-};

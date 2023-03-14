@@ -146,7 +146,6 @@ export type KlarnaParams = {
     billingDetails: Pick<Required<BillingDetails>, 'email'> & {
       address: Pick<Required<Address>, 'country'>;
     } & BillingDetails;
-    shippingDetails?: ShippingDetails;
   };
 };
 
@@ -230,8 +229,6 @@ export interface CardResult {
   fingerprint?: string;
   funding?: string;
   last4?: string;
-  preferredNetwork?: string;
-  availableNetworks?: Array<string>;
 }
 
 export interface FpxResult {

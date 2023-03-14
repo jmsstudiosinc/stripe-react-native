@@ -3,7 +3,6 @@ import type {
   PaymentMethod,
   PaymentIntent,
   ApplePay,
-  PlatformPay,
   PaymentSheet,
   SetupIntent,
   InitialiseParams,
@@ -69,13 +68,7 @@ type NativeStripeSdkType = {
   initPaymentSheet(
     params: PaymentSheet.SetupParams
   ): Promise<InitPaymentSheetResult>;
-  initPaymentSheetWithOrderTracking(
-    params: PaymentSheet.SetupParams,
-    callback?: () => void
-  ): Promise<InitPaymentSheetResult>;
-  presentPaymentSheet(
-    options: PaymentSheet.PresentOptions
-  ): Promise<PresentPaymentSheetResult>;
+  presentPaymentSheet(): Promise<PresentPaymentSheetResult>;
   confirmPaymentSheetPayment(): Promise<ConfirmPaymentSheetPaymentResult>;
   createTokenForCVCUpdate(cvc: string): Promise<CreateTokenForCVCUpdateResult>;
   handleURLCallback(url: string): Promise<boolean>;
@@ -112,33 +105,6 @@ type NativeStripeSdkType = {
   collectFinancialConnectionsAccounts(
     clientSecret: string
   ): Promise<FinancialConnections.SessionResult>;
-  resetPaymentSheetCustomer(): Promise<null>;
-  isPlatformPaySupported(params: {
-    googlePay?: GooglePay.IsSupportedParams;
-  }): Promise<boolean>;
-  createPlatformPayPaymentMethod(
-    params: PlatformPay.PaymentMethodParams,
-    usesDeprecatedTokenFlow: boolean
-  ): Promise<PlatformPay.PaymentMethodResult | PlatformPay.TokenResult>;
-  dismissPlatformPay(): Promise<boolean>;
-  updatePlatformPaySheet(
-    summaryItems: Array<ApplePay.CartSummaryItem>,
-    shippingMethods: Array<ApplePay.ShippingMethod>,
-    errors: Array<PlatformPay.ApplePaySheetError>
-  ): Promise<void>;
-  confirmPlatformPay(
-    clientSecret: string,
-    params: PlatformPay.ConfirmParams,
-    isPaymentIntent: boolean
-  ): Promise<
-    PlatformPay.ConfirmPaymentResult | PlatformPay.ConfirmSetupIntentResult
-  >;
-  configureOrderTracking(
-    orderTypeIdentifier: string,
-    orderIdentifier: string,
-    webServiceUrl: string,
-    authenticationToken: string
-  ): Promise<void>;
 };
 
 const { StripeSdk } = NativeModules;
